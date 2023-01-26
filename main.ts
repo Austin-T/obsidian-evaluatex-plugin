@@ -1,4 +1,5 @@
 import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import evaluatex from 'evaluatex/dist/evaluatex';
 
 // Remember to rename these classes and interfaces!
 
@@ -40,9 +41,14 @@ export default class MyPlugin extends Plugin {
 		this.addCommand({
 			id: 'sample-editor-command',
 			name: 'Sample editor command',
+			hotkeys: [{ modifiers: ["Mod"], key: "j" }],
 			editorCallback: (editor: Editor, view: MarkdownView) => {
-				console.log(editor.getSelection());
-				editor.replaceSelection('Sample Editor Command');
+				// console.log(editor.getSelection());
+				// editor.replaceSelection('Sample Editor Command');
+				let selectedText = editor.getSelection();
+				let fn = evaluatex(selectedText);
+				let result = fn();
+				editor.replaceSelection(result.toString());
 			}
 		});
 		// This adds a complex command that can check whether the current state of the app allows execution of the command
